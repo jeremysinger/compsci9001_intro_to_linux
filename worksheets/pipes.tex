@@ -1,0 +1,186 @@
+\documentclass{article}
+\usepackage{xcolor}
+\usepackage{hyperref}
+%\usepackage{minted}
+%\usemintedstyle{bash}
+
+
+
+\usepackage[scaled]{helvet}
+\usepackage{sectsty}
+\allsectionsfont{\bfseries\sffamily}
+
+\usepackage{listings}
+\lstset{
+    frame=single,
+    showstringspaces=false,
+    breaklines=true,
+    postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
+}
+\lstdefinestyle{BashInputStyle}{
+  language=bash,
+  morekeywords={mkdir,ls,rm,mv,cp,date,hostname,whoami,zip,unzip,rmdir,curl,grep,head,tail,less},
+  basicstyle=\small\sffamily,
+%  numbers=left,
+%  numberstyle=\tiny,
+%  numbersep=3pt,
+  frame=tb,
+  columns=fullflexible,
+  backgroundcolor=\color{yellow!20},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth,
+  literate={-}{-}1,
+}
+
+\makeatletter
+\let \@sverbatim \@verbatim
+\def \@verbatim {\@sverbatim \verbatimplus}
+{\catcode`'=13 \gdef \verbatimplus{\catcode`'=13 \chardef '=13 }} 
+\makeatother
+
+\usepackage{menukeys}
+
+\begin{document}
+
+\noindent
+{\Large \textsf{\textbf{Unix Tutorial 2: Unix Pipes}}}
+
+\bigskip
+
+
+Today, we are going to practise chaining together simple commands using the Unix pipe facility, which is written as a vertical bar i.e.\ \textbar.
+Most of our pipelines will have the following shape---there is a `source' command that generates some textual output, which is then filtered by a number of other commands. In this tutorial, we will work through two examples.
+
+\section*{Counting Word Occurrences}
+
+Download a textfile containing \textit{The Adventures of Sherlock Holmes} from the web, using this command\footnote{Sorry, you will have to type in this command rather than cutting+pasting. The PDF version of this file uses different character encodings for -- and other characters, that the console will not recognize.}.
+\begin{lstlisting}[style=BashInputStyle]
+    $ curl -O http://www.gutenberg.org/cache/epub/1661/pg1661.txt.utf8
+    $ ls *.txt.utf8
+\end{lstlisting}
+
+Notice that a file \texttt{pg1661.txt.utf8} has been downloaded to your filespace, into your working directory. You may inspect the contents of file using the less command:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ less pg1661.txt.utf8
+\end{lstlisting}
+% $
+
+Press space bar to scroll down one screen and \keys{b} to scroll back one screen. Press \keys{q} to quit the less program.
+
+Sometimes, you will want to look at just the first (or last) few lines of a long textfile, e.g.\ a log file. Use the head (or tail) command for this:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ head -n 10 pg1661.txt.utf8
+    $ tail -n 10 pg1661.txt.utf8
+\end{lstlisting}
+
+To print the whole text file out to the console output, use the cat command as follows:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ cat pg1661.txt.utf8
+\end{lstlisting}
+% $
+
+We are going to use cat as the source command in our pipeline. Suppose we want to find all the instances where Holmes says, `My dear Watson.' Let's build a pipeline that searches for this phrase in our text file:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ cat pg1661.txt.utf8 | grep -i  "my dear watson"
+\end{lstlisting}
+% $
+
+When you run this command, it should print out three lines which are the three occasions when Sherlock utters his memorable phrase to his friend. Notice the \textbar\ is the pipe operator, sending the output from the cat command to the grep command directly. Notice the \texttt{-i}  flag for grep, which makes the search case-insensitive.
+There are plenty of other useful flags for grep. You might want to print out a line or two of context before each quotation, or the position in the source file where each expression occurs. Try this command:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ cat pg1661.txt.utf8 | grep -inC3 "my dear watson"
+\end{lstlisting}
+% $
+
+which will print line numbers for the matching lines, and include 3 lines of context each side of the matching line. Notice that we can run together the flags after a single dash---this saves typing \texttt{-i -n -C3} as separate flags.
+
+Here are some more search terms for you---try looking for \textbf{elementary} and \textbf{cocaine}. How many times does each word occur in the text file?
+
+
+
+\section*{Counting Word Occurrences}
+
+For a second exercise, we are going to find out the current temperature in Glasgow from the BBC website.
+We fetch the Glasgow weather page with a curl command:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ curl https://www.bbc.co.uk/weather/2648579
+\end{lstlisting}
+%$
+
+This command prints out the whole HTML webpage to the console standard output. We want to filter this command, so it just prints out the relevant information. Let's use the grep command to search for the latest observation of weather\footnote{This is a long command, so it may spread over multiple lines, but you can carry on typing directly on a single line that gets wrapped by the console.}.
+
+% \begin{lstlisting}[style=BashInputStyle]
+\begin{verbatim}
+    $ curl -s https://www.bbc.co.uk/weather/2648579 | 
+        grep wr-day__weather-type-description 
+\end{verbatim}
+%$
+
+Note the \texttt{-s} flag to curl makes it operate \textit{silently} so it does not print out its progress information as it downloads the data. The \texttt{grep} command prints out matching lines for the wr-day \ldots div class.
+
+Now we need to use some search-and-replace commands (\texttt{sed}) to strip out the HTML tags, with their angle-bracket start and end characters:
+
+\begin{verbatim}
+    $ curl -s https://www.bbc.co.uk/weather/2648579 | 
+    grep wr-day__weather-type-description |
+    sed -e 's/<[^>]*>/ /g'
+\end{verbatim}
+
+
+This returns lots of JSON key-value pairs, which we can split into separate lines with a \texttt{tr} command, a single character search-and-replace.
+
+\begin{verbatim}
+curl -s https://www.bbc.co.uk/weather/2648579 | 
+grep wr-day__weather-type-description |  
+sed -e 's/<[^>]*>/ /g' | 
+tr ',' '\n'
+\end{verbatim}
+
+We only want the first three lines, since these contain the most recent weather report, for the current time. We use the \texttt{head} command to get the first few lines.
+
+\begin{verbatim}
+curl -s https://www.bbc.co.uk/weather/2648579 | 
+grep wr-day__weather-type-description |  
+sed -e 's/<[^>]*>/ /g' | 
+tr , '\n' | 
+head -n 3
+\end{verbatim}
+%$
+
+
+Finally, let's save the weather report to a textfile called glasgowtemp.txt. We can use the $>$  operator to redirect the output of the pipeline to a file.
+
+\begin{verbatim}
+curl -s https://www.bbc.co.uk/weather/2648579 | 
+grep wr-day__weather-type-description |  
+sed -e 's/<[^>]*>/ /g' | 
+tr ',' '\n' | 
+head -n 3 > glasgowtemp.txt
+\end{verbatim}
+%$
+
+Some more challenges:
+\begin{enumerate}
+\item (easy) Adapt this pipeline to print out the temperature in Singapore.
+\item (difficult) Write a bash script that takes a single argument which is a UK placename. Your script will use the Open Weather service to find the temperature in that place, then it will print out "The current temperature in XXX is Y degrees".
+The relevant URL for Open Weather will have the form:
+\url{http://api.openweathermap.org/data/2.5/weather?q=CITYNAME}, e.g.\
+\url{http://api.openweathermap.org/data/2.5/weather?q=glasgow}.
+This web address will return a JSON string, which you will have to parse to extract the main.temp field, which measures the temperature in Kelvin units.
+Relevant Unix utilities are: \textsf{curl}, \textsf{cut}, \textsf{echo}, \textsf{bc}. Check out the man pages for these utilities to find out how to use them. \textbf{Update}: To use OpenWeatherMap, you need to sign up for an API key --- how annoying! Check out the details at \url{http://openweathermap.org/appid}. If you want to use my API key, as me for it in class. \textbf{Note!} If you use a curl command and you have \verb+$+ or \verb+&+ characters in the URL, then you need to enclose the \textit{entire} URL in double quotes, to avoid the shell misinterpreting these special characters.
+\end{enumerate}
+
+\section*{Further Reading}
+
+For further investigation today, use the man command to find out 
+the flags for all the commands you have already executed.
+
+There are lots of grep tutorials online, e.g.\ see \url{http://www.thegeekstuff.com/2009/03/15-practical-unix-grep-command-examples/}.
+
+\end{document}
