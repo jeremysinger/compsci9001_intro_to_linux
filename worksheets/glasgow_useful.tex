@@ -1,0 +1,130 @@
+\documentclass{article}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\usepackage[scaled]{helvet}
+\usepackage{sectsty}
+\allsectionsfont{\bfseries\sffamily}
+
+\usepackage{listings}
+\lstdefinestyle{BashInputStyle}{
+  language=bash,
+  morekeywords={mkdir,ls,rm,mv,cp,date,hostname,whoami,zip,unzip,rmdir},
+  basicstyle=\small\sffamily,
+%  numbers=left,
+%  numberstyle=\tiny,
+%  numbersep=3pt,
+  frame=tb,
+  columns=fullflexible,
+  backgroundcolor=\color{yellow!20},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth,
+  literate={-}{-}1,
+}
+
+\usepackage{menukeys}
+
+\begin{document}
+
+\noindent
+{\Large \textsf{\textbf{Unix Tutorial X: Glasgow Linux Quirks}}}
+
+\bigskip
+
+This worksheet will give you some useful hints and tips
+for managing your account on the Glasgow Linux servers
+in the Boyd Orr labs.
+
+These machines are running CentOS Linux 7.3.
+This is a Red Hat variant of Linux. You can verify this by
+executing the command \lstinline{cat /etc/redhat-release}
+and observing the output.
+
+
+\subsection*{File Space}
+
+Your home directory should appear the same, whichever lab machine
+you log into. This is because your home directory is a network
+mapped drive. You have a file space limit on this directory. You can
+find out what this limit is, and how much space you are using, with the
+\lstinline{quota} command. It should show something like:
+
+{\small
+\begin{verbatim}
+Disk quotas for user jsinger (uid 3252): 
+     Filesystem  blocks   quota   limit   grace   files   quota   limit   grace
+unix5:/export/users/grad
+                9811584  20000000 22000000          285508       0       0        
+\end{verbatim}
+}
+
+Given 1K block size, this means I have a quota of 20GB, which is probably more than you have :-(
+
+To find out which files and directories are taking up lots of space,
+run the command \lstinline{du -hsc * | sort -h} and the final items should be the largest.
+Note that this does not include `hidden' directories, which start with a . character. To see these instead, you need to modify the command to \lstinline{du -hsc .[!.]* | sort -h} .
+
+
+\subsection*{Installing Programs}
+
+If you are administering your own Linux machine, you can install
+programs from package repositories using dnf, apt-get or similar utilities. However this is not possible on the Boyd Orr machines, since
+you do not have root access. Instead, you should download source code
+tarballs and build programs from source. Suppose you download foo.tar.gz and want to install it in your system. You would go through a
+sequence of commands like this:
+
+\begin{lstlisting}[style=BashInputStyle]
+  tar xvzf foo.tar.gz
+  cd foo
+  ./configure --prefix=/tmp/
+  make
+  make install
+\end{lstlisting}
+
+where the prefix flag specifies the directory where you want to instal the utility. Note that configure expects bin, include, lib and man directories inside the prefix directory. Ask a tutor for more details.
+You will want to have the prefix bin directory in your PATH so you can execute the program, when it is installed.
+
+Try this out with a simple utility, by following instructions at
+\url{http://www.ee.surrey.ac.uk/Teaching/Unix/unix7.html}.
+
+\subsection*{Remote Access}
+
+You can login to the Boyd Orr machines using ssh, via an ssh session
+on our gateway server, sibu.dcs.gla.ac.uk.
+Use your standard login credentials to access sibu.
+
+If you want to forward web traffic from a dcs machine to an external
+machine, you can use ssh forwarding from sibu. So, suppose I want to access port 80 (default web server port) or port 443 (default https port) on machine 130.209.240.41 --- I can do this via sibu with the following command:
+
+\begin{lstlisting}[style=BashInputStyle]
+# http variant ...
+ssh -L 8001:130.209.240.41:80 -N jsinger@sibu.dcs.gla.ac.uk
+# https variant ...
+ssh -L 8001:130.209.240.41:443 -N jsinger@sibu.dcs.gla.ac.uk
+\end{lstlisting}
+
+This allows me to access the remote machine by pointing my web browser at \url{http://localhost:8001} or \url{https://localhost:8001}. Try it for the https variant on this IP address above--- where do you get to?
+Ssh tunnelling like this is very useful
+when you want to access SoCS servers from outside the university network. Make sure you know how to do this for your PSD course!
+
+\subsection*{Quitting Programs}
+
+\begin{itemize}
+\item To quit from an interactive shell, type \texttt{exit} or press
+\keys{\ctrl + D} together.
+\item To quit from a running shell utility, type \keys{\ctrl + C} together.
+\item To quit a GUI program, run the command \texttt{xkill} from a console, then click the skull-and-crossbones mouse cursor over the GUI window of the program you want to quit.
+\item To quit a running process, you can find its process id in a terminal with the \texttt{ps} command. Then run \lstinline{kill -9 xxx} where xxx is the integer process id number.
+\item To quit a scrolling text viewer, perhaps more, less or man, type \keys{q}.
+\item To restart the system when you have problems, type \keys{CTRL+ALT+F2} together to get a non-graphical login prompt. Then type
+  \keys{CTRL+ALT+DEL} to initiate a restart.
+\end{itemize}
+
+\section*{Further Reading}
+
+For further investigation today, use the man command to find out 
+the flags for all the commands you have already executed.
+
+Also talk to the tutors to find out about other useful commands.
+
+\end{document}

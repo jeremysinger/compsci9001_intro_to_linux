@@ -1,0 +1,175 @@
+\documentclass{article}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\usepackage[scaled]{helvet}
+\usepackage{sectsty}
+\allsectionsfont{\bfseries\sffamily}
+
+\usepackage{listings}
+\lstset{
+    frame=single,
+    showstringspaces=false,
+    breaklines=true,
+    postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
+}
+\lstdefinestyle{BashInputStyle}{
+  language=bash,  morekeywords={mkdir,ls,rm,mv,cp,date,hostname,whoami,zip,unzip,rmdir,curl,grep,head,tail,less,vim,which},
+  basicstyle=\small\sffamily,
+%  numbers=left,
+%  numberstyle=\tiny,
+%  numbersep=3pt,
+  frame=tb,
+  columns=fullflexible,
+  backgroundcolor=\color{yellow!20},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth,
+  literate={-}{-}1,
+}
+
+\lstdefinestyle{JavaProg}{
+ language=Java,
+  basicstyle=\small\sffamily,
+%  numbers=left,
+%  numberstyle=\tiny,
+%  numbersep=3pt,
+  frame=tb,
+  columns=fullflexible,
+  backgroundcolor=\color{blue!20},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth
+}
+
+\usepackage{menukeys}
+
+\begin{document}
+
+\noindent
+{\Large \textsf{\textbf{Unix Tutorial 3: Vim for text editing}}}
+
+\bigskip
+
+
+Today, we are going to use the vim text editor. It is pre-installed on the Glasgow Linux systems. However if you are running your own Linux distro, you may need to install vim. Issue a command like:
+\begin{lstlisting}[style=BashInputStyle]
+    $ sudo apt-get install vim
+\end{lstlisting}
+%$ 
+on Ubuntu distros.
+
+Plenty of other text editors are available, including Emacs (Jeremy's favourite!), gedit (more like Notepad++) and nano (very basic). We are focusing on vim since it is recommended for the AP3 course.
+
+\section*{Writing a Java Program}
+
+Let's write a one-class Java program. 
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ cd ~
+    $ vim Hello.java
+\end{lstlisting}
+
+This should drop you into the vim screen, where you can start to edit the file. Press \keys{i} to enter \textit{insert mode} then type the Java program, something like...
+
+\begin{lstlisting}[style=JavaProg]
+public class Hello {
+  public static void main(String [] args) {
+    System.out.println("Hello world");
+  }
+}
+\end{lstlisting}
+
+Now we need to save the Java program. Press Escape to exit the insert mode. Then press the following two keys one after another (i.e.\ not at the same time): \keys{:} \keys{w} Enter
+This will save your Java source code file.
+
+Use the cursor keys (or hjkl keys) to navigate to the second line, containing the \texttt{main} method signature. Press \keys{o} to \textit{open} a line underneath and transition to insert mode. Enter a comment, something like...
+\begin{lstlisting}[style=JavaProg]
+public class Hello {
+  public static void main(String [] args) {
+    // simple console output
+    System.out.println("Hello world");
+  }
+}
+\end{lstlisting}
+
+Press Escape to exit the insert mode. Now navigate so your cursor is over the w character of the word \texttt{world} in the output string. Press the following sequence of keys (one after another) to delete this word: \keys{d} \keys{w}
+
+Let's do some cutting and pasting now (in vim terminology, this is called yanking).
+Move the cursor to the start of the System.out.println statement. Press \keys{v} to enter visual mode. Move the cursor to the semicolon at the end of the statement. Press \keys{y} to yank (i.e.\ copy) this text.
+Then move the cursor down a line and press \keys{p} to paste. You might need to rearrange your curly braces and space-tabbing for the formatting. Hopefully you will end up with a program like:
+\begin{lstlisting}[style=JavaProg]
+public class Hello {
+  public static void main(String [] args) {
+    // simple console output
+    System.out.println("Hello ");
+    System.out.println("Hello ");
+  }
+}
+\end{lstlisting}
+
+We can delete a whole line at once. Let's get rid of the comment line. Move the cursor to this line, check you are not in insert mode, then press the key sequence \keys{d} \keys{d}
+For single-character edits, use \keys{x} to delete the single character under the cursor.
+
+Let's save our program again. Press Escape \keys{:} \keys{w} Enter to write the file.
+
+Is your source code shown using syntax highlighting? If not, try entering the command \texttt{:syntax on}.
+
+Vim is very powerful---we have only looked at the basic editing facilities. If you like it, you are encouraged to find out more online.
+
+To quit the vim program, type Escape \keys{:} \keys{q} Enter
+If you have unsaved files, you are prompted to save these. 
+
+\section*{Compiling and Running Java Programs}
+
+Now we have created a Java program, let's compile it. We are going to use the command-line Java compiler, which appears to be less user-friendly than Eclipse---but hopefully you will get used to it.
+
+First check whether the Java compiler is installed on your system:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ which javac
+\end{lstlisting}
+
+If this command returns a line showing the location of the javac file, then it is installed. If this command does not print out any text, then javac is not installed. To install it on Ubuntu-style systems, do this:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ sudo apt-get install default-jdk
+\end{lstlisting}
+%$
+
+or on Fedora systems, something like:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ sudo yum install java-1.8.0-openjdk.x86_64
+\end{lstlisting}
+%$
+
+Presuming you are in the directory where you saved Hello.java, execute these commands:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ javac Hello.java
+    $ ls *.class
+\end{lstlisting}
+
+If the compilation completes successfully, you should see a Hello.class file. If the compilation fails, read the error message and work out where the error is in your file. Use vim again to correct the file, then recompile it.
+
+You can run the Java class file as follows:
+\begin{lstlisting}[style=BashInputStyle]
+    $ java Hello
+\end{lstlisting}
+%$
+
+Notice that the Java output is sent to the standard console output, just like for other Linux utilities. This means you can put Java apps into pipelines with grep, etc. For example, let's count the number of times that the Java program prints Hello:
+\begin{lstlisting}[style=BashInputStyle]
+    $ java Hello | grep -ci hello
+\end{lstlisting}
+%$
+
+which should print out the result \texttt{2}.
+
+\section*{Further Reading}
+
+There are lots of vim tutorials online, including plenty of interactive screencasts. Search youtube for \texttt{vim power user} videos and see what you find. Let me know if you watch any really good videos!
+
+Here is a nicely formatted vim cheatsheet for commands and shortcuts:
+\url{http://tnerual.eriogerg.free.fr/vimqrc.pdf}
+
+\end{document}

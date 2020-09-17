@@ -1,0 +1,142 @@
+\documentclass{article}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\usepackage[scaled]{helvet}
+\usepackage{sectsty}
+\allsectionsfont{\bfseries\sffamily}
+
+\usepackage{listings}
+\lstdefinestyle{BashInputStyle}{
+  language=bash,
+  morekeywords={mkdir,ls,rm,mv,cp,date,hostname,whoami,zip,unzip,rmdir},
+  basicstyle=\small\sffamily,
+%  numbers=left,
+%  numberstyle=\tiny,
+%  numbersep=3pt,
+  frame=tb,
+  columns=fullflexible,
+  backgroundcolor=\color{yellow!20},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth,
+  literate={-}{-}1,
+}
+
+\usepackage{menukeys}
+
+\begin{document}
+
+\noindent
+{\Large \textsf{\textbf{Unix Tutorial 1: Files in Linux}}}
+
+\bigskip
+
+
+Log in to your Unix system with your username and password, then
+open a bash shell. On the Glasgow Linux setup, you should execute command \texttt{gnome-terminal} or \texttt{xterm} to start a bash shell in a window. On a Mac machine, you should execute the \texttt{Terminal} application.
+
+Type a simple command, e.g.\
+\begin{lstlisting}[style=BashInputStyle]
+    $ date
+\end{lstlisting}
+% $
+Press Enter after typing in \lstinline{date}. The system should print out the current date and time.
+Try a few more simple commands \ldots
+\begin{lstlisting}[style=BashInputStyle]
+    $ hostname
+    $ whoami
+\end{lstlisting}
+% $
+
+and observe the output.
+To quit your bash session, either type \lstinline{exit} or press
+\keys{\ctrl + D} together.
+
+
+
+
+Now we are going to practise file manipulations. The special directory \~{} is your home directory, and / is the root directory. Try this:
+
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ cd /
+    $ ls
+    $ cd ~
+    $ ls
+\end{lstlisting}
+
+Now we are going to create some files. We will use the cat command to write a string of characters into plaintext files.
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ cat > a.txt
+The quick brown fox jumps over the lazy dog.
+\end{lstlisting}
+% $
+
+You will need to press Enter then \keys{\ctrl + D} after typing the sentence. Here, \keys{\ctrl + D} means `end of file'.
+
+You can run ls again, to show that file a.txt is now in your home directory. Execute some more commands:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ cp a.txt b.txt
+    $ ls
+    $ mv a.txt fox.txt
+    $ cp fox.txt f.txt
+\end{lstlisting}
+
+Now we want to create a new directory and move all the files into this directory.
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ mkdir tutorial1
+    $ ls
+    $ mv *.txt tutorial1/
+    $ cd tutorial1/
+    $ ls
+    $ cd ..
+\end{lstlisting}
+
+Now suppose we want to save this directory as a compressed zip archive called files.zip.
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ cd ~
+    $ zip -r files.zip tutorial1 
+    $ ls -lh    
+\end{lstlisting}
+% $
+
+The zip file has been created in your home directory. It should only be a few bytes in size. Now let's delete the original files and directory that we created.
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ cd tutorial1
+    $ rm *.txt
+    $ cd ..
+    $ rmdir tutorial1  
+\end{lstlisting}
+
+
+If you try to execute the rmdir command when the directory is not empty, it will fail and give you an error message. However there is a quicker way to delete a directory and all its contents. Try this:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ unzip files.zip
+\end{lstlisting}
+% $
+
+to restore the tutorial1 directory and its contents. Use the cd and ls commands to check the files are all present. Now, to delete the tutorial1 directory in one go:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ cd ~
+    $ rm -r -f tutorial1
+\end{lstlisting}
+
+The r flag stands for `recursive' and f for `force'. Use this command with caution! In his book \textit{Creativity Inc.}, Ed Catmull describes how most of the graphics from \textit{Toy Story 2} were wiped from Pixar's filestore by careless use of the rm command. Google for \texttt{rm toy story 2} to find out the details.
+
+
+\section*{Further Reading}
+
+For further investigation today, use the man command to find out 
+the flags for all the commands you have already executed.
+Find out how the cat command works in more detail---you can use cat both to print out existing text files, to create new ones and to append to existing files. e.g.\ see \url{https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/3/html/Step_by_Step_Guide/s1-navigating-usingcat.html} for more details.
+
+There are plenty of other file handling tutorials online, e.g.\ see \url{http://ryanstutorials.net/linuxtutorial/filemanipulation.php}.
+
+\end{document}

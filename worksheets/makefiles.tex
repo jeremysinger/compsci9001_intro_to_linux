@@ -1,0 +1,183 @@
+\documentclass{article}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\usepackage[scaled]{helvet}
+\usepackage{sectsty}
+\allsectionsfont{\bfseries\sffamily}
+
+\usepackage{listings}
+\lstset{
+    frame=single,
+    showstringspaces=false,
+    breaklines=true,
+    postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
+}
+\lstdefinestyle{BashInputStyle}{
+  language=bash,  morekeywords={mkdir,ls,rm,mv,cp,date,hostname,whoami,zip,unzip,rmdir,curl,grep,head,tail,less,vim,which},
+  basicstyle=\small\sffamily,
+%  numbers=left,
+%  numberstyle=\tiny,
+%  numbersep=3pt,
+  frame=tb,
+  columns=fullflexible,
+  backgroundcolor=\color{yellow!20},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth,
+  literate={-}{-}1,
+}
+
+\lstdefinestyle{CeeProg}{
+ language=C,
+  basicstyle=\small\sffamily,
+%  numbers=left,
+%  numberstyle=\tiny,
+%  numbersep=3pt,
+  frame=tb,
+  columns=fullflexible,
+  backgroundcolor=\color{green!20},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth
+}
+
+\lstdefinestyle{MakeProg}{
+ language=make,
+  basicstyle=\small\sffamily,
+%  numbers=left,
+%  numberstyle=\tiny,
+%  numbersep=3pt,
+  frame=tb,
+  columns=fullflexible,
+  backgroundcolor=\color{red!20},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth
+}
+
+\usepackage{menukeys}
+
+\begin{document}
+
+\noindent
+{\Large \textsf{\textbf{Unix Tutorial 4: C and Makefiles}}}
+
+\bigskip
+
+
+Today, we are going to use the Clang C compiler and the Make utility. These are pre-installed on the Glasgow Linux systems. However if you are running your own Linux distro, you may need to install extra packages. Try:
+\begin{lstlisting}[style=BashInputStyle]
+    $ sudo apt-get install build-essential
+    $ sudo apt-get install clang
+\end{lstlisting}
+on Ubuntu distros.
+It is important to become familiar with these utilities since you will be using them extensively in the Advanced Programming 3 course later on.
+
+\section*{Writing a C Program}
+
+Let's write a simple hello world C program.
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ cd ~
+    $ vim hello.c
+\end{lstlisting}
+
+This should drop you into the vim screen, where you can start to edit the file. Press \keys{i} to enter \textit{insert mode} then type the C program, something like...
+
+\begin{lstlisting}[style=CeeProg]
+#include <stdio.h>
+
+int main(void) {
+    printf("hello world\n");
+    return 0;
+}
+\end{lstlisting}
+
+Now save hello.c and quit vim (Escape \keys{:} \keys{w} \keys{q} Enter).
+
+Now let's compile this C program. 
+\begin{lstlisting}[style=BashInputStyle]
+    $ clang hello.c -o hello
+\end{lstlisting}
+%$
+which should generate an executable file called hello, if the compilation succeeds.
+You can check whether the executable file is there by listing the files in the directory.
+\begin{lstlisting}[style=BashInputStyle]
+    $ ls -l 
+\end{lstlisting}
+%$
+You should be able to see a file called `hello' which has a recent timestamp and has the \texttt{x} permission set to indicate that it is an executable file.
+
+Now let's run this program. 
+\begin{lstlisting}[style=BashInputStyle]
+    $ ./hello
+\end{lstlisting}
+%$
+and watch it print its string to the standard output.
+
+
+
+\section*{Creating a Makefile}
+
+Now let's use the make utility to automate our build process. A Makefile is a script that specifies how to build target files from source files.
+In the same directory as your \texttt{hello.c} program, create a file called \texttt{Makefile}.
+\begin{lstlisting}[style=BashInputStyle]
+    $ vim Makefile
+\end{lstlisting}
+%$
+
+The file should have the following format:
+\begin{lstlisting}[style=MakeProg]
+# my first makefile (this is a comment)
+# my student id 
+
+hello: hello.c
+    clang hello.c -o hello
+\end{lstlisting}
+
+Notice that lines beginning with the hash character are comments (like Python).
+The target is separated from the source file by a colon. 
+The line(s) underneath the target specify the commands to create the target. Note that each of these command lines \textit{must} start with a TAB character.
+
+Save your file. To check it works, run the command \texttt{make} in this directory.
+\begin{lstlisting}[style=BashInputStyle]
+    $ make
+\end{lstlisting}
+%$
+
+It will either tell you that `hello is up to date' or it will rebuild the hello executable. If hello is up to date, then you can change the timestamp on the hello.c file to make it more recent than the executable file---using the touch command. Try this:
+\begin{lstlisting}[style=BashInputStyle]
+    $ touch hello.c
+    $ make
+\end{lstlisting}
+
+This will force a recompilation. The other way to force the recompilation is to use the \texttt{-f} flag for make. 
+
+Note that the first target in the Makefile is the `default'. To create a different target, you must specify its name when you run `make' i.e.
+\begin{lstlisting}[style=BashInputStyle]
+    $ make hello
+\end{lstlisting}
+%$
+
+\section*{Some Puzzles for You}
+
+\subsection{Shorten it!}
+You can rewrite your Makefile to shorten it considerable. In a rule (specifying how to convert a source into a target), the target name can be written as \verb+$@+ and the source name can be written as \verb+$<+. Rewrite your Makefile to use these meta-variables instead. Check \url{http://www.linux-pages.com/2013/02/gnu-makefile-special-variables-dollar-at/} for more details.
+
+\subsection{Do it for Java}
+Find (or quickly write) a Java program and write a Makefile to automate its compilation, using the \texttt{javac} command.
+
+\subsection{Lots of Dependencies}
+\textbf{(difficult)} In the work above, we looked at the \texttt{touch} command. Use \texttt{man touch} to find out more about it. In general, \texttt{touch} takes a single filename argument. If that file exists, then it updates its timestamp to `now'. If that file does not exist, then \texttt{touch} creates an empty file with the current timestamp. Ok \ldots imagine a process where you want to generate a file \texttt{degree}, which requires you to have three courses files \texttt{a, b, c}. Suppose each course (e.g.\ \texttt{a}) requires you to have \texttt{a.exam} and \texttt{a.coursework}. You have a nice set of dependencies now!  Can you turn this into a Makefile, using the touch command to `create' each file? I will start you off...
+
+
+\begin{lstlisting}[style=MakeProg]
+a: a.course a.exam
+    touch $@
+
+a.course:
+    touch $@
+
+a.exam:
+    touch $@
+
+\end{lstlisting}
+\end{document}
