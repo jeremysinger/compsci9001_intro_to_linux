@@ -1,0 +1,10 @@
+In a Linux textbook, the pages are numbered consecutively from 1, ... 
+if the number of digits used for page numbers is 822, what is the number of the
+final page?
+
+
+How many pages are there in a PDF document - without opening it?
+
+How many two-letter words containing X are there ... for a game of scrabble?
+
+
