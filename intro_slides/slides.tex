@@ -1,19 +1,39 @@
-\documentclass{beamer}
+\documentclass[17pt]{beamer}
+%% 17pt gives quite big font, 20pt is massive!
+
 
 \usepackage{url}
+\usepackage{graphicx}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily,
+  language=bash,
+  showstringspaces=false
+  keywordstyle=\color{red}
+}
+
 \begin{document}
 
-\title{Linux Fundamentals}
+\title{Intro to Linux}
 \author{Jeremy Singer}
 
 \frame{\titlepage}
 
 \begin{frame}
+  \frametitle{Teaser question}
+  \begin{itemize}
+  \item \visible<1->{How many two-letter words containing X are there ... for a game of scrabble?}
+  \end{itemize}
+ \visible<2->{
+ \lstinputlisting{scrabble.sh}}
+\end{frame}
+
+
+\begin{frame}
 \frametitle{Course objectives}
 \begin{enumerate}
-\item gain familiarity with Unix systems
-\item find out about useful tools and techniques
-  \item find out how to find out about useful \ldots
+\item introduce Linux as a platform for developing software
+\item gain experience with command line tools and scripting
+\item encourage analysis of OS design and implementation
 \end{enumerate}
 \end{frame}
 
