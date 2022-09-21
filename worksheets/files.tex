@@ -9,7 +9,7 @@
 \usepackage{listings}
 \lstdefinestyle{BashInputStyle}{
   language=bash,
-  morekeywords={mkdir,ls,rm,mv,cp,date,hostname,whoami,zip,unzip,rmdir},
+  morekeywords={mkdir,ls,rm,mv,cp,date,hostname,whoami,zip,unzip,rmdir,pwd},
   basicstyle=\small\sffamily,
 %  numbers=left,
 %  numberstyle=\tiny,
@@ -33,7 +33,7 @@
 
 
 Log in to your Unix system with your username and password, then
-open a bash shell. On the Glasgow Linux setup, you should execute command \texttt{gnome-terminal} or \texttt{xterm} to start a bash shell in a window. On a Mac machine, you should execute the \texttt{Terminal} application.
+open a bash shell. On the Glasgow remote Linux setup, you drop into a shell automatically with your ssh login. On a Linux laptop, you should execute command \texttt{gnome-terminal} or \texttt{xterm} to start a bash shell in a window. On a Mac machine, you should execute the \texttt{Terminal} application. On Windows, if you have WSL installed, the \texttt{wsl} command will drop you into a shell.
 
 Type a simple command, e.g.\
 \begin{lstlisting}[style=BashInputStyle]
@@ -55,7 +55,7 @@ To quit your bash session, either type \lstinline{exit} or press
 
 
 
-Now we are going to practise file manipulations. The special directory \~{} is your home directory, and / is the root directory. Try this:
+Now we are going to practise file manipulations, moving around the directory hierarchy. The special directory \~{} is your home directory, and / is the root directory. Try this:
 
 
 \begin{lstlisting}[style=BashInputStyle]
@@ -65,6 +65,10 @@ Now we are going to practise file manipulations. The special directory \~{} is y
     $ ls
 \end{lstlisting}
 
+Two more special directories are `dot' \texttt{.} (the current directory)  and `dot dot' \texttt{..} (the parent directory). Another useful command is \texttt{pwd} which shows the current directory you are in.
+
+\textbf{Challenge}: When you first login to your system, how many directories do you have to go up (with \texttt{cd ..}) to reach the root directory? Use \texttt{pwd} to work out when you reach the root.
+
 Now we are going to create some files. We will use the cat command to write a string of characters into plaintext files.
 
 \begin{lstlisting}[style=BashInputStyle]
@@ -73,7 +77,7 @@ The quick brown fox jumps over the lazy dog.
 \end{lstlisting}
 % $
 
-You will need to press Enter then \keys{\ctrl + D} after typing the sentence. Here, \keys{\ctrl + D} means `end of file'.
+You will need to press Enter then \keys{\ctrl + D} after typing the words in the sentence. Here, \keys{\ctrl + D} means `end of file'.
 
 You can run ls again, to show that file a.txt is now in your home directory. Execute some more commands:
 
@@ -89,8 +93,8 @@ Now we want to create a new directory and move all the files into this directory
 \begin{lstlisting}[style=BashInputStyle]
     $ mkdir tutorial1
     $ ls
-    $ mv *.txt tutorial1/
-    $ cd tutorial1/
+    $ mv *.txt tutorial1
+    $ cd tutorial1
     $ ls
     $ cd ..
 \end{lstlisting}
@@ -125,17 +129,31 @@ to restore the tutorial1 directory and its contents. Use the cd and ls commands 
 
 \begin{lstlisting}[style=BashInputStyle]
     $ cd ~
-    $ rm -r -f tutorial1
+    $ rm -rf tutorial1
 \end{lstlisting}
 
 The r flag stands for `recursive' and f for `force'. Use this command with caution! In his book \textit{Creativity Inc.}, Ed Catmull describes how most of the graphics from \textit{Toy Story 2} were wiped from Pixar's filestore by careless use of the rm command. Google for \texttt{rm toy story 2} to find out the details.
+
+\section*{Questions}
+
+\begin{enumerate}
+\item If \texttt{cd ..} moves to the parent directory, then what is the parent directory of root \texttt{/} ?
+\item Why is the following command a \emph{very bad idea?} \texttt{rm -rf /}
+\item In your bash prompt, what does the \keys{\arrowkeyup}  cursor arrow do? What about \keys{\arrowkeydown}?
+\item Some commands (like \texttt{ls} and \texttt{rm}) take extra option flags or switches. See if you can find out the switches for the following (using Google or \texttt{man}):
+  \begin{itemize}
+  \item listing all files in a directory in order of modification, with most recently modified first?
+  \item listing all files in a directory in order of modification, with most recently modified last?
+  \item removing a file, with an interactive check where the user has to type \texttt{y} if they really want to remove the file?
+  \end{itemize}
+\end{enumerate}
 
 
 \section*{Further Reading}
 
 For further investigation today, use the man command to find out 
 the flags for all the commands you have already executed.
-Find out how the cat command works in more detail---you can use cat both to print out existing text files, to create new ones and to append to existing files. e.g.\ see \url{https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/3/html/Step_by_Step_Guide/s1-navigating-usingcat.html} for more details.
+Find out how the cat command works in more detail---you can use cat both to print out existing text files, to create new ones and to append to existing files. e.g.\ see \url{https://archive.download.redhat.com/pub/redhat/linux/7.3/en/doc/RH-DOCS/rhl-gsg-en-7.3/s1-navigating-usingcat.html} for more details.
 
 There are plenty of other file handling tutorials online, e.g.\ see \url{http://ryanstutorials.net/linuxtutorial/filemanipulation.php}.
 
