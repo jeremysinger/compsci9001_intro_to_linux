@@ -1,0 +1,192 @@
+\documentclass{article}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\usepackage[scaled]{helvet}
+\usepackage{sectsty}
+\allsectionsfont{\bfseries\sffamily}
+
+\usepackage{listings}
+\lstdefinestyle{BashInputStyle}{
+  language=bash,
+  morekeywords={mkdir,ls,rm,mv,cp,date,hostname,whoami,zip,unzip,rmdir,git},
+  basicstyle=\small\sffamily,
+%  numbers=left,
+%  numberstyle=\tiny,
+%  numbersep=3pt,
+  frame=tb,
+  columns=fullflexible,
+  backgroundcolor=\color{yellow!20},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth,
+  literate={-}{-}1,
+  keepspaces,
+  showstringspaces=false,
+}
+
+\usepackage{menukeys}
+
+\begin{document}
+
+\noindent
+{\Large \textsf{\textbf{Unix Tutorial 6: Version Control with git}}}
+
+\bigskip
+
+Git is a powerful version control system. In this tutorial sheet, we will
+introduce git and look at basic local commands for a single user.
+
+%% history and version control
+It's always useful to track changes on your files, particularly for
+projects with many source code files and multiple contributors.
+Distributed version control systems are currently the standard
+approach --- these allows each user to have their own copy of the
+project with all its changes, and copies can be synchronized between
+the multiple users.
+
+A $repository$ is the full set of change history for a project.
+A distributed version control system implies that
+each user has their own complete local repository.
+
+The most common distributed VC tool is called $git$\footnote{\url{https://git-scm.com/}}. Originally invented
+by Linus Torvalds (who also developed Linux) git is now used widely
+across the open source community and by industrial software engineers.
+
+Although distributed, there are centralized repo servers like \url{https://github.com} and \url{https://bitbucket.org} that
+allow easy synchronization between users. Some centralized servers
+provide other continuous integration services. Gitlab is one example;
+you will be using this system in your team project work.
+
+\subsection*{Initial task: Set up git accounts}
+
+If you don't yet have a github account, set one up today at \url{https://github.com}. Remember you might use this for the rest of your developer career, so choose a vaguely sensible username; for instance, I am \texttt{jeremysinger}. Many companies check github profiles when they are hiring, so it's worth having something impressive to show them.
+
+In the University, we run a private gitlab server at \url{https://stgit.dcs.gla.ac.uk}. You should set up an account here as well, using your Unix username. (Check details with tutors or TP3 coordinators.) It's likely you will use this server for your Team Project and PSD coursework
+throughout Level 3.
+
+You also want to configure your personal details for git commits.
+This metadata will be linked with your git change history. 
+Run the following commands in a terminal:
+
+\begin{lstlisting}[style=BashInputStyle]
+git config --global user.name "Your Name"
+git config --global user.email "1234567a@student.gla.ac.uk"
+\end{lstlisting}
+
+
+
+\subsection*{My first git repo}
+
+Create a new empty directory and change into it, i.e.\
+\begin{lstlisting}[style=BashInputStyle]
+    $ mkdir my_first_repo
+    $ cd my_first_repo
+\end{lstlisting}
+% $
+At the moment this is just a standard Unix directory, nothing special.
+Let's turn it into a git repository \ldots
+\begin{lstlisting}[style=BashInputStyle]
+    $ git init
+\end{lstlisting}
+% $
+
+This command creates a `hidden' directory called \texttt{.git}
+(you can see this with \texttt{ls -a}) where the repository metadata is
+stored.
+
+Now we can look at the status of the repository:
+\begin{lstlisting}[style=BashInputStyle]
+    $ git status
+\end{lstlisting}
+% $
+
+It's not very interesting at the moment, because we don't have any files
+in the repo. Let's create a file called \texttt{file.txt} and
+add it to the repository.
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ echo "hello world" > file.txt
+    $ git add file.txt
+    $ git commit -m "a silly little text file"
+\end{lstlisting}
+% $
+
+Do you see the workflow? First we add the file, which says `something interesting is happening here' to git. Officially, this is called \texttt{staging}. Then we commit the change, which adds the staged changes to the git repo
+as a \texttt{changeset}. The \texttt{-m} flag allows us to summarize the
+changes, which is useful for logging. If we omit the textual summary and simply type \lstinline{git commit} then we are dropped into an
+interactive text editor (normally vim)
+where we can write the changes in a textfile, then save and quit. Again, this
+text is stored in the repository log. Let's look at our logfile now.
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ git log
+\end{lstlisting}
+% $
+
+We might make some further changes to file.txt --- go on, try it. Then we an
+compare these changes against the last committed version:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ git diff
+\end{lstlisting}
+% $
+
+This will show us lines that have been added or removed, relative to the last
+committed version, for each file. Suppose we are happy with these changes
+and we want to commit the changed file to the repo \ldots we simply go
+through the same two-stage procedure as previously:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ git add file.txt
+    $ git commit -m "updated text file"
+\end{lstlisting}
+% $
+
+\subsection*{Recovering from mistakes}
+
+The main motivation for using version control is that it makes it easier
+to recover earlier versions of the files, if you make mistakes and need to
+`undo' things. There are three key scenarios we explore in this section.
+
+
+\subsubsection*{Undo unstaged changes}
+
+Suppose you have edited a file and you want to roll it back to the most recent
+commit in the git history.
+If you have yet done a \texttt{git add} on the file, then the following command will undo changes since the most recent commit:
+\begin{lstlisting}[style=BashInputStyle]
+    $ git checkout --  file.txt
+\end{lstlisting}
+This undo action works even if you have deleted file.txt by accident with
+\texttt{rm}.
+
+\subsubsection*{Undo staged changes}
+Suppose you have edited a file, run \texttt{git add file.txt} but then you decide you want to `undo' the add. So long as you have not yet committed this staged change, it is possible to do:
+\begin{lstlisting}[style=BashInputStyle]
+    $ git reset file.txt
+\end{lstlisting}
+
+\subsubsection*{Undo committed changes}
+Recall that every committed changeset in git gets a version identifier, which is a hex number indicating the checksum of the changeset.
+If we want to `undo' the effects of a particular commit, we need to find its
+version number.
+A useful command is \lstinline{git log --oneline}, which shows commit hashes and corresponding messages. Once we have identified the ID of the commit we want to `undo', we run:
+\begin{lstlisting}[style=BashInputStyle]
+    $ git revert ID
+\end{lstlisting}
+
+This command generates a new commit that is the reverse of the commit that was specified for the revert. Git will then open up a text editor (likely to be vim) to prompt for a new commit message. Reverts are the safest `undo' option because of they leave a clear trail in the commit history of when an undo operation was executed. Alternative commands include
+\lstinline{git reset} and \lstinline{git rebase}.
+
+Next time, we will look at interacting with other collaborators on a shared
+project with a remote git repository.
+
+
+\section*{Further Reading}
+
+There are lots of online resources and tutorials for git.
+Try this one for starters: \url{https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository} and this interactive one next
+\url{https://learngitbranching.js.org/}.
+
+
+\end{document}
