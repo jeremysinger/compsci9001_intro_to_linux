@@ -40,7 +40,7 @@
   xleftmargin=0.1\linewidth
 }
 
-\usepackage{menukeys}
+\usepackage[mackeys=text,os=win]{menukeys}
 
 \begin{document}
 
@@ -50,16 +50,18 @@
 \bigskip
 
 
-Today, we are going to use the vim text editor. It is pre-installed on the Glasgow Linux systems. However if you are running your own Linux distro, you may need to install vim. Issue a command like:
+Today, we are going to use the vim text editor. It is pre-installed on most Linux systems. However if you are running your own Linux distro, you may need to install vim. Issue a command like:
 \begin{lstlisting}[style=BashInputStyle]
-    $ sudo apt-get install vim
+    $ sudo apt install vim
 \end{lstlisting}
 %$ 
 on Ubuntu distros.
 
-Plenty of other text editors are available, including Emacs (Jeremy's favourite!), gedit (more like Notepad++) and nano (very basic). We are focusing on vim since it is recommended for the AP3 course.
+Plenty of other text editors are available, including Emacs (Jeremy's favourite!), gedit (more like Notepad++) and nano (very basic). We are focusing on vim since it is recommended for the Systems Programming course.
 
 \section*{Writing a Java Program}
+
+Remember Java from last year? Maybe you used eclipse or VS Code or IntelliJ? Now let's use vim instead!
 
 Let's write a one-class Java program. 
 
@@ -78,10 +80,10 @@ public class Hello {
 }
 \end{lstlisting}
 
-Now we need to save the Java program. Press Escape to exit the insert mode. Then press the following two keys one after another (i.e.\ not at the same time): \keys{:} \keys{w} Enter
+Now we need to save the Java program. Press \keys{\esc} (escape) to exit the insert mode. Then press the following two keys one after another (i.e.\ not at the same time): \keys{:} \keys{w} \keys{\enter}
 This will save your Java source code file.
 
-Use the cursor keys (or hjkl keys) to navigate to the second line, containing the \texttt{main} method signature. Press \keys{o} to \textit{open} a line underneath and transition to insert mode. Enter a comment, something like...
+Use the cursor keys (or \keys{h} \keys{j} \keys{k} \keys{l} keys) to navigate to the second line, containing the \texttt{main} method signature. Press \keys{o} to \textit{open} a line underneath and transition to insert mode. Enter a comment, something like...
 \begin{lstlisting}[style=JavaProg]
 public class Hello {
   public static void main(String [] args) {
@@ -109,13 +111,13 @@ public class Hello {
 We can delete a whole line at once. Let's get rid of the comment line. Move the cursor to this line, check you are not in insert mode, then press the key sequence \keys{d} \keys{d}
 For single-character edits, use \keys{x} to delete the single character under the cursor.
 
-Let's save our program again. Press Escape \keys{:} \keys{w} Enter to write the file.
+Let's save our program again. Press \keys{\esc} \keys{:} \keys{w} Enter to write the file.
 
 Is your source code shown using syntax highlighting? If not, try entering the command \texttt{:syntax on}.
 
 Vim is very powerful---we have only looked at the basic editing facilities. If you like it, you are encouraged to find out more online.
 
-To quit the vim program, type Escape \keys{:} \keys{q} Enter
+To quit the vim program, type \keys{\esc} \keys{:} \keys{q} \keys{\enter} in sequence.
 If you have unsaved files, you are prompted to save these. 
 
 \section*{Compiling and Running Java Programs}
@@ -131,18 +133,22 @@ First check whether the Java compiler is installed on your system:
 If this command returns a line showing the location of the javac file, then it is installed. If this command does not print out any text, then javac is not installed. To install it on Ubuntu-style systems, do this:
 
 \begin{lstlisting}[style=BashInputStyle]
-    $ sudo apt-get install default-jdk
+    $ sudo apt install default-jdk
 \end{lstlisting}
-%$
 
-or on Fedora systems, something like:
-
+Or if you do not have permissions to do this, try this sequence of commands instead:
 \begin{lstlisting}[style=BashInputStyle]
-    $ sudo yum install java-1.8.0-openjdk.x86_64
+  $ curl -s "https://get.sdkman.io" | bash
+  $ source "$HOME/.sdkman/bin/sdkman-init.sh"
+  $ sdk list
+  $ sdk install java VERSION
 \end{lstlisting}
-%$
 
-Presuming you are in the directory where you saved Hello.java, execute these commands:
+where VERSION is the appropriate version for you to install.
+% $
+
+
+Presuming you are still in the directory where you saved Hello.java, execute these commands:
 
 \begin{lstlisting}[style=BashInputStyle]
     $ javac Hello.java
