@@ -51,20 +51,22 @@
 \bigskip
 
 
-Today, we are going to introduce the \LaTeX system for document processing. This is pre-installed on the Glasgow Linux systems. However if you are running your own Linux distro, you will almost certainly need to install extra packages. On Ubuntu, try
+Today, we are going to introduce the \LaTeX\  system for document processing. This is pre-installed on the Glasgow Linux system \texttt{stlinux09}. However if you are running your own Linux distro, you might want to install the software for yourself.
+On Ubuntu, try
 \begin{lstlisting}[style=BashInputStyle]
-    $ sudo apt-get install texlive-full
+    $ sudo apt install texlive-full
 \end{lstlisting}
 %$
-or on Fedora systems,
-\begin{lstlisting}[style=BashInputStyle]
-    $ sudo yum install texlive-scheme-full
-\end{lstlisting}
-%$
+Or on a Mac, download MacTeX from \url{https://www.tug.org/mactex/} and install the dmg file. Note these installations are multi-GBs, so will take a \emph{long} time to download.
 
-You write a script that specifies the markup for the final document. Then you compile this script into a pdf to view the rendered document.  We recommend that you use \LaTeX for reports in PSD3 and for your Honours dissertation in your final year project. So it's worth investing some time to learn the tool now \ldots
+The alternative approach (and probably easier!) is to use \url{https://overleaf.com}. This is a cloud-based \LaTeX\ service. You will need to set up an account. Because the University has a subscription to this service, you should be able to access Pro features for free by registering with your Uni email address. Check out \url{https://www.overleaf.com/edu/glasgow} for details.
+
 
 \section*{Your first document}
+
+With \LaTeX, you write a script that specifies the markup for the final document (like markdown or HTML).
+Then you compile this script into a pdf to view the rendered document.  We recommend that you use \LaTeX\ for reports in PSD(H) and for your Honours dissertation in your final year project. So it's worth investing some time to learn the tool now \ldots
+
 
 Below is the simple scaffolding---the minimal number of macros that you need for a simple document.
 
@@ -83,7 +85,9 @@ Create this file in vim, save it as firstdoc.tex. Now you can turn it into a pdf
 
 Note that the evince tool requires a Window manager---you need to be running with a GUI rather than a terminal. Other pdf viewing apps are available, such as Acrobat Reader, pdf.js (Mozilla) and Preview.app (Mac).
 
-Now add some more complex markup to firstdoc.tex, for instance \ldots
+If you are using Overleaf, then you simply enter the \LaTeX\ source code into the middle pane, and click to recompile the PDF in the right hand pane.
+
+Now let's add some more complex markup to firstdoc.tex, for instance \ldots
 
 \begin{lstlisting}[style=LatexProg]
 In \LaTeX, you may use \textit{italic} and \textbf{bold} face fonts.
@@ -133,7 +137,7 @@ Remember your Makefiles from yesterday? Write a Makefile to automate the build o
 
 
 \subsection{Recall your Maths}
-Remember all the set equivalences you learnt in Algorithmic Foundations? Typeset them in a \LaTeX document. I'll give you one to get started: it's a distributivity rule \ldots
+Remember all the set equivalences you learnt in Algorithmic Foundations? Typeset them in a \LaTeX\ document. I'll give you one to get started: it's a distributivity rule \ldots
 
 \begin{equation}
 A \cup (B \cap C) \equiv (A \cup B) \cap (A \cup C)
@@ -147,14 +151,14 @@ A \cup (B \cap C) \equiv (A \cup B) \cap (A \cup C)
 
 \subsection{Timetabling}
 
-Check out the info at \url{www1.maths.leeds.ac.uk/latex/TableHelp1.pdf} to find out how to draw tables in \LaTeX. Armed with this information, construct a lecture timetable for yourself using \LaTeX. Each column can represent a day, each cell an hour for a lecture. 
+Check out the info at \url{http://www1.maths.leeds.ac.uk/latex/TableHelp1.pdf} to find out how to draw tables in \LaTeX. Armed with this information, construct a lecture timetable for yourself using \LaTeX. Each column can represent a day, each cell an hour for a lecture. 
 
 \section*{Further Reading}
 
-There are plenty of \LaTeX resources online.
+There are plenty of \LaTeX\ resources online.
+The cheatsheet is my favourite:
 \begin{itemize}
-\item tutorials e.g.\ at \url{http://www.latex-tutorial.com/tutorials/}
-\item collaborative editor at \url{http://sharelatex.com}
+\item tutorials e.g.\ at \url{https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes}
 \item cheat sheet of common commands at \url{http://users.dickinson.edu/~richesod/latex/latexcheatsheet.pdf}
 \end{itemize}
 
