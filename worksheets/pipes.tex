@@ -5,7 +5,7 @@
 %\usemintedstyle{bash}
 
 
-
+\usepackage[T1]{fontenc}
 \usepackage[scaled]{helvet}
 \usepackage{sectsty}
 \allsectionsfont{\bfseries\sffamily}
@@ -19,7 +19,7 @@
 }
 \lstdefinestyle{BashInputStyle}{
   language=bash,
-  morekeywords={mkdir,ls,rm,mv,cp,date,hostname,whoami,zip,unzip,rmdir,curl,grep,head,tail,less},
+  morekeywords={mkdir,ls,rm,mv,cp,date,hostname,whoami,zip,unzip,rmdir,curl,grep,head,tail,less,gunzip},
   basicstyle=\small\sffamily,
 %  numbers=left,
 %  numberstyle=\tiny,
@@ -49,20 +49,30 @@
 
 
 Today, we are going to practise chaining together simple commands using the Unix pipe facility, which is written as a vertical bar i.e.\ \textbar.
-Most of our pipelines will have the following shape---there is a `source' command that generates some textual output, which is then filtered by a number of other commands. In this tutorial, we will work through two examples.
+Most of our pipelines will have the following shape---there is a `source' command that generates some textual data as an \textit{output stream}, which is then filtered by another command that processes this textual data as its \textit{input stream}. In this tutorial, we will work through two examples.
 
 \section*{Counting Word Occurrences}
 
-Download a textfile containing \textit{The Adventures of Sherlock Holmes} from the web, using this command\footnote{Sorry, you will have to type in this command rather than cutting+pasting. The PDF version of this file uses different character encodings for -- and other characters, that the console will not recognize.}.
+Download a textfile containing \textit{The Adventures of Sherlock Holmes} from the web, using this command\footnote{Sorry, you might have to type in this command rather than cutting+pasting. The PDF version of this file uses different character encodings for -- and other characters, that the console will not recognize. Also, this command should be on one line but the URL makes it too long!}.
 \begin{lstlisting}[style=BashInputStyle]
-    $ curl -O http://www.gutenberg.org/cache/epub/1661/pg1661.txt.utf8
-    $ ls *.txt.utf8
+    $ curl -O \
+     https://www.gutenberg.org/cache/epub/1661/pg1661.txt.utf8.gzip
+    $ ls pg1661.*
 \end{lstlisting}
 
-Notice that a file \texttt{pg1661.txt.utf8} has been downloaded to your filespace, into your working directory. You may inspect the contents of file using the less command:
+This downloads a compressed version of the text file, which we need to decompress with the \texttt{gunzip} utility. You might need to install this with something like \texttt{apt-get install gzip}.
 
 \begin{lstlisting}[style=BashInputStyle]
-    $ less pg1661.txt.utf8
+    $ mv pg1661.txt.utf8.gzip holmes.txt.gz
+    $ gunzip holmes.txt.gz
+    $ ls *.txt
+\end{lstlisting}
+
+
+Notice that a file \texttt{holmes.txt} has been downloaded to your filespace, into your working directory. You may inspect the contents of file using the less command:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ less holmes.txt
 \end{lstlisting}
 % $
 
@@ -71,21 +81,21 @@ Press space bar to scroll down one screen and \keys{b} to scroll back one screen
 Sometimes, you will want to look at just the first (or last) few lines of a long textfile, e.g.\ a log file. Use the head (or tail) command for this:
 
 \begin{lstlisting}[style=BashInputStyle]
-    $ head -n 10 pg1661.txt.utf8
-    $ tail -n 10 pg1661.txt.utf8
+    $ head -n 10 holmes.txt
+    $ tail -n 10 holmes.txt
 \end{lstlisting}
 
 To print the whole text file out to the console output, use the cat command as follows:
 
 \begin{lstlisting}[style=BashInputStyle]
-    $ cat pg1661.txt.utf8
+    $ cat holmes.txt
 \end{lstlisting}
 % $
 
 We are going to use cat as the source command in our pipeline. Suppose we want to find all the instances where Holmes says, `My dear Watson.' Let's build a pipeline that searches for this phrase in our text file:
 
 \begin{lstlisting}[style=BashInputStyle]
-    $ cat pg1661.txt.utf8 | grep -i  "my dear watson"
+    $ cat holmes.txt | grep -i  "my dear watson"
 \end{lstlisting}
 % $
 
@@ -93,7 +103,7 @@ When you run this command, it should print out three lines which are the three o
 There are plenty of other useful flags for grep. You might want to print out a line or two of context before each quotation, or the position in the source file where each expression occurs. Try this command:
 
 \begin{lstlisting}[style=BashInputStyle]
-    $ cat pg1661.txt.utf8 | grep -inC3 "my dear watson"
+    $ cat holmes.txt | grep -inC3 "my dear watson"
 \end{lstlisting}
 % $
 
@@ -173,7 +183,7 @@ The relevant URL for Open Weather will have the form:
 \url{http://api.openweathermap.org/data/2.5/weather?q=CITYNAME}, e.g.\
 \url{http://api.openweathermap.org/data/2.5/weather?q=glasgow}.
 This web address will return a JSON string, which you will have to parse to extract the main.temp field, which measures the temperature in Kelvin units.
-Relevant Unix utilities are: \textsf{curl}, \textsf{cut}, \textsf{echo}, \textsf{bc}. Check out the man pages for these utilities to find out how to use them. \textbf{Update}: To use OpenWeatherMap, you need to sign up for an API key --- how annoying! Check out the details at \url{http://openweathermap.org/appid}. If you want to use my API key, as me for it in class. \textbf{Note!} If you use a curl command and you have \verb+$+ or \verb+&+ characters in the URL, then you need to enclose the \textit{entire} URL in double quotes, to avoid the shell misinterpreting these special characters.
+Relevant Unix utilities are: \textsf{curl}, \textsf{cut}, \textsf{echo}, \textsf{bc}. Check out the man pages for these utilities to find out how to use them. \textbf{Update}: To use OpenWeatherMap, you need to sign up for an API key --- how annoying! Check out the details at \url{http://openweathermap.org/appid}. \textbf{Note!} If you use a curl command and you have \verb+$+ or \verb+&+ characters in the URL, then you need to enclose the \textit{entire} URL in double quotes, to avoid the shell misinterpreting these special characters.
 \end{enumerate}
 
 \section*{Further Reading}
@@ -182,5 +192,5 @@ For further investigation today, use the man command to find out
 the flags for all the commands you have already executed.
 
 There are lots of grep tutorials online, e.g.\ see \url{http://www.thegeekstuff.com/2009/03/15-practical-unix-grep-command-examples/}.
-
+Also, here is an exhaustive tutorial on sed: \url{https://www.grymoire.com/Unix/Sed.html}.
 \end{document}
