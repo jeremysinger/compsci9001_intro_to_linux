@@ -6,6 +6,7 @@
 
 
 \usepackage[T1]{fontenc}
+\usepackage{upquote}
 \usepackage[scaled]{helvet}
 \usepackage{sectsty}
 \allsectionsfont{\bfseries\sffamily}
@@ -125,54 +126,52 @@ We fetch the Glasgow weather page with a curl command:
 
 This command prints out the whole HTML webpage to the console standard output. We want to filter this command, so it just prints out the relevant information. Let's use the grep command to search for the latest observation of weather\footnote{This is a long command, so it may spread over multiple lines, but you can carry on typing directly on a single line that gets wrapped by the console.}.
 
-% \begin{lstlisting}[style=BashInputStyle]
-\begin{verbatim}
+\begin{lstlisting}[style=BashInputStyle]
     $ curl -s https://www.bbc.co.uk/weather/2648579 | 
         grep wr-day__weather-type-description 
-\end{verbatim}
-%$
+\end{lstlisting}
 
 Note the \texttt{-s} flag to curl makes it operate \textit{silently} so it does not print out its progress information as it downloads the data. The \texttt{grep} command prints out matching lines for the wr-day \ldots div class.
 
 Now we need to use some search-and-replace commands (\texttt{sed}) to strip out the HTML tags, with their angle-bracket start and end characters:
 
-\begin{verbatim}
+\begin{lstlisting}[style=BashInputStyle]
     $ curl -s https://www.bbc.co.uk/weather/2648579 | 
     grep wr-day__weather-type-description |
     sed -e 's/<[^>]*>/ /g'
-\end{verbatim}
+\end{lstlisting}
 
 
 This returns lots of JSON key-value pairs, which we can split into separate lines with a \texttt{tr} command, a single character search-and-replace.
 
-\begin{verbatim}
+\begin{lstlisting}[style=BashInputStyle]
 curl -s https://www.bbc.co.uk/weather/2648579 | 
 grep wr-day__weather-type-description |  
 sed -e 's/<[^>]*>/ /g' | 
 tr ',' '\n'
-\end{verbatim}
+\end{lstlisting}
 
 We only want the first three lines, since these contain the most recent weather report, for the current time. We use the \texttt{head} command to get the first few lines.
 
-\begin{verbatim}
+\begin{lstlisting}[style=BashInputStyle]
 curl -s https://www.bbc.co.uk/weather/2648579 | 
 grep wr-day__weather-type-description |  
 sed -e 's/<[^>]*>/ /g' | 
 tr , '\n' | 
 head -n 3
-\end{verbatim}
+\end{lstlisting}
 %$
 
 
 Finally, let's save the weather report to a textfile called glasgowtemp.txt. We can use the $>$  operator to redirect the output of the pipeline to a file.
 
-\begin{verbatim}
+\begin{lstlisting}[style=BashInputStyle]
 curl -s https://www.bbc.co.uk/weather/2648579 | 
 grep wr-day__weather-type-description |  
 sed -e 's/<[^>]*>/ /g' | 
 tr ',' '\n' | 
 head -n 3 > glasgowtemp.txt
-\end{verbatim}
+\end{lstlisting}
 %$
 
 Some more challenges:
