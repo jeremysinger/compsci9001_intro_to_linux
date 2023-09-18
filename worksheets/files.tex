@@ -9,7 +9,7 @@
 \usepackage{listings}
 \lstdefinestyle{BashInputStyle}{
   language=bash,
-  morekeywords={mkdir,ls,rm,mv,cp,date,hostname,whoami,zip,unzip,rmdir,pwd},
+  morekeywords={mkdir,ls,rm,mv,cp,date,hostname,whoami,zip,unzip,rmdir,pwd,cal},
   basicstyle=\small\sffamily,
 %  numbers=left,
 %  numberstyle=\tiny,
@@ -45,6 +45,7 @@ Try a few more simple commands \ldots
 \begin{lstlisting}[style=BashInputStyle]
     $ hostname
     $ whoami
+    $ cal 2023
 \end{lstlisting}
 % $
 
@@ -151,10 +152,19 @@ The r flag stands for `recursive' and f for `force'. Use this command with cauti
 
 \section*{Further Reading}
 
-For further investigation today, use the man command to find out 
+For further investigation today, use the \texttt{man} command to find out 
 the flags for all the commands you have already executed.
-Find out how the cat command works in more detail---you can use cat both to print out existing text files, to create new ones and to append to existing files. e.g.\ see \url{https://archive.download.redhat.com/pub/redhat/linux/7.3/en/doc/RH-DOCS/rhl-gsg-en-7.3/s1-navigating-usingcat.html} for more details.
+For instance, you might run \texttt{man cat} to Find out how the cat command works in more detail---you can use cat both to print out existing text files, to create new ones and to append to existing files.
+You press \keys{q} to quit the man page viewer and return to the terminal.
 
-There are plenty of other file handling tutorials online, e.g.\ see \url{http://ryanstutorials.net/linuxtutorial/filemanipulation.php}.
+There are plenty of helpful file handling tutorials online, some examples
+below:
+\begin{itemize}
+\item \url{http://ryanstutorials.net/linuxtutorial/filemanipulation.php}
+\item \url{https://www.redhat.com/sysadmin/navigating-filesystem-linux-terminal}
+\item \url{https://www.redhat.com/sysadmin/Linux-file-navigation-commands}
+\end{itemize}
+  
+  
 
 \end{document}
