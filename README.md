@@ -5,7 +5,7 @@ This one week course happens at the start of Level 3 (third year) for Computing 
 The course learning objectives are:
 
 * to introduce Linux as a platform for software development
-* to guve experience in using command-line tools and shell scripts
+* to give experience in using command-line tools and shell scripts
 * to encourage a critical appraisal of OS design and implementation decisions 
 
 The course is structured as a single introductory lecture to motivate the need for Linux and give some historical background. This is followed by a series of self-directed practical labs, one tutorial sheet per lab, introducing various basic concepts in a step-by-step manner.
