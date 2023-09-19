@@ -1,0 +1,113 @@
+\documentclass{article}
+\usepackage{xcolor}
+\usepackage{hyperref}
+%\usepackage{minted}
+%\usemintedstyle{bash}
+
+
+\usepackage[T1]{fontenc}
+\usepackage{upquote}
+\usepackage[scaled]{helvet}
+\usepackage{sectsty}
+\allsectionsfont{\bfseries\sffamily}
+
+\usepackage{listings}
+\lstset{
+    frame=single,
+    showstringspaces=false,
+    breaklines=true,
+    postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
+}
+\lstdefinestyle{BashInputStyle}{
+  language=bash,
+  morekeywords={mkdir,ls,rm,mv,cp,date,hostname,whoami,zip,unzip,rmdir,curl,grep,head,tail,less,gunzip,ssh},
+  basicstyle=\small\sffamily,
+%  numbers=left,
+%  numberstyle=\tiny,
+%  numbersep=3pt,
+  frame=tb,
+  columns=fullflexible,
+  backgroundcolor=\color{yellow!20},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth,
+  literate={-}{-}1,
+}
+
+\makeatletter
+\let \@sverbatim \@verbatim
+\def \@verbatim {\@sverbatim \verbatimplus}
+{\catcode`'=13 \gdef \verbatimplus{\catcode`'=13 \chardef '=13 }} 
+\makeatother
+
+\usepackage{menukeys}
+
+\begin{document}
+
+\noindent
+{\Large \textsf{\textbf{Unix Tutorial 0: Accessing the Terminal}}}
+
+\bigskip
+
+
+
+
+This week we are doing a deep dive into Unix. You need to go
+through a series of practical worksheets to gain experience with
+using the Unix terminal.
+
+There are different options for accessing Linux, which we outline
+below. Read through the sheet and work out which option is best
+for you. Our lab tutors will be available to help and advise each
+afternoon this week.
+
+
+
+\section*{Windows}
+
+On Windows 10 or 11, install and activate WSL (official instructions at \url{https://learn.microsoft.com/en-us/windows/wsl/install}) then you can use the terminal natively in Windows with \texttt{wsl.exe}. Installation might take some time, especially on a wireless connection.
+
+If you are more adventurous, install a virtual machine (VM) using VirtualBox
+(see \url{https://www.virtualbox.org/}) and then choose your Linux distributionprobably Ubuntu 22.04.3 LTS unless you have a strong preference.
+
+If you are super adventurous---but only do this if you have backed up your system---you could partition your drive and install Linux natively as a dual boot option. This is quite complex and will take time.
+
+You might also decide to use an online VM from Amazon Web Services, Windows Azure or similar. Watch out! You will need to sign up for an account and probably have to give them your credit card details.
+This will allow you to access the server via the \texttt{ssh} tool, which you should be able to find in your command prompt.
+
+The university has set up a Azure VM that \emph{might} work, at IP address
+\texttt{10.224.160.71}. This server is only accessible on the University campus or with the UoG VPN.
+Use your GUID credentials to login - although this might not work(?!)
+
+\begin{lstlisting}[style=BashInputStyle]
+  $ ssh 2412345a@10.224.160.71
+\end{lstlisting}
+
+
+
+
+
+\section*{Mac}
+
+If you are running macOS then you already own a Unix system---congratulations!
+You can run all the text-based commands via the \texttt{Terminal}
+app. Some commands might require you to install extra binary tools:
+we recommend using \textit{homebrew} to do this. See \url{https://brew.sh/} for installation instructions\footnote{If
+you are observant, you'll see that I am running macOS plus brew for all
+the tutorial videos I recorded!}.
+
+Alternatively, you can run VirtualBox on your Mac and install a
+Linux VM image, following the same steps as for Windows PC.
+See \url{https://www.virtualbox.org/} for downloads. Note this works fine
+on Intel and M1 Macs.
+
+The alternative is to run \texttt{ssh} from your terminal app
+to connect to a remote Linux server on your Mac. Generally, you
+do something like:
+
+\begin{lstlisting}[style=BashInputStyle]
+  $ ssh username@hostname.com
+\end{lstlisting}
+
+to connect to a remote server.
+
+\end{document}
