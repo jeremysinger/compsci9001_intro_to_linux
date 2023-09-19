@@ -91,7 +91,7 @@ int main(void) {
 }
 \end{lstlisting}
 
-Now save hello.c and quit vim (Escape \keys{:} \keys{w} \keys{q} Enter).
+Now save hello.c and quit vim (\keys{\esc} \keys{:} \keys{w} \keys{q} \keys{\enter}).
 
 Now let's compile this C program. 
 \begin{lstlisting}[style=BashInputStyle]
@@ -99,6 +99,14 @@ Now let's compile this C program.
 \end{lstlisting}
 %$
 which should generate an executable file called hello, if the compilation succeeds.
+
+If you don't have the \texttt{clang} compiler installed, you might try this command with \texttt{gcc} instead:
+
+\begin{lstlisting}[style=BashInputStyle]
+    $ gcc hello.c -o hello
+\end{lstlisting}
+%$
+
 You can check whether the executable file is there by listing the files in the directory.
 \begin{lstlisting}[style=BashInputStyle]
     $ ls -l 
@@ -111,7 +119,7 @@ Now let's run this program.
     $ ./hello
 \end{lstlisting}
 %$
-and watch it print its string to the standard output.
+and watch it print its string to the standard output. Well done! You have written a C program!
 
 
 
