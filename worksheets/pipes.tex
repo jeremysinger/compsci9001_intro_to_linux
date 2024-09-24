@@ -1,3 +1,15 @@
+%% \DocumentMetadata{
+%%   lang        = en,
+%%   pdfversion  = 2.0,
+%%   pdfstandard = ua-2,
+%%   pdfstandard = a-4f, %or a-4
+%%   testphase   = 
+%%    {phase-III,
+%%     title,
+%%     table,
+%%     math,
+%%     firstaid}  
+%% }
 \documentclass{article}
 \usepackage{xcolor}
 \usepackage{hyperref}
@@ -43,10 +55,16 @@
 
 \begin{document}
 
-\noindent
-{\Large \textsf{\textbf{Unix Tutorial 2: Unix Pipes}}}
 
-\bigskip
+\title{Unix Tutorial 2: Unix Pipes}
+\author{Jeremy Singer}
+\date{23 Sep 2024}
+\maketitle
+  
+%% \noindent
+%% {\Large \textsf{\textbf{Unix Tutorial 2: Unix Pipes}}}
+
+%% \bigskip
 
 
 Today, we are going to practise chaining together simple commands using the Unix pipe facility, which is written as a vertical bar i.e.\ \textbar.
@@ -57,15 +75,13 @@ Most of our pipelines will have the following shape---there is a `source' comman
 Download a textfile containing \textit{The Adventures of Sherlock Holmes} from the web, using this command\footnote{Sorry, you might have to type in this command rather than cutting+pasting. The PDF version of this file uses different character encodings for -- and other characters, that the console will not recognize. Also, this command should be on one line but the URL makes it too long!}.
 \begin{lstlisting}[style=BashInputStyle]
     $ curl -O \
-     https://www.gutenberg.org/cache/epub/1661/pg1661.txt.utf8.gzip
+     https://www.gutenberg.org/cache/epub/1661/pg1661.txt
     $ ls pg1661.*
 \end{lstlisting}
-
-This downloads a compressed version of the text file, which we need to decompress with the \texttt{gunzip} utility. You might need to install this with something like \texttt{apt-get install gzip}.
+Let's rename this file to a better filename.
 
 \begin{lstlisting}[style=BashInputStyle]
-    $ mv pg1661.txt.utf8.gzip holmes.txt.gz
-    $ gunzip holmes.txt.gz
+    $ mv pg1661.txt holmes.txt
     $ ls *.txt
 \end{lstlisting}
 
@@ -157,7 +173,7 @@ We only want the first three lines, since these contain the most recent weather 
 curl -s https://www.bbc.co.uk/weather/2648579 | 
 grep wr-day__weather-type-description |  
 sed -e 's/<[^>]*>/ /g' | 
-tr , '\n' | 
+tr ',' '\n' | 
 head -n 3
 \end{lstlisting}
 %$
@@ -192,4 +208,5 @@ the flags for all the commands you have already executed.
 
 There are lots of grep tutorials online, e.g.\ see \url{http://www.thegeekstuff.com/2009/03/15-practical-unix-grep-command-examples/}.
 Also, here is an exhaustive tutorial on sed: \url{https://www.grymoire.com/Unix/Sed.html}.
+
 \end{document}
