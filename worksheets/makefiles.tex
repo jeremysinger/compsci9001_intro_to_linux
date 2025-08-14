@@ -53,7 +53,7 @@
   xleftmargin=0.1\linewidth
 }
 
-\usepackage{menukeys}
+\usepackage[mackeys=text,os=win]{menukeys}
 
 \begin{document}
 
@@ -143,7 +143,7 @@ hello: hello.c
 
 Notice that lines beginning with the hash character are comments (like Python).
 The target is separated from the source file by a colon. 
-The line(s) underneath the target specify the commands to create the target. Note that each of these command lines \textit{must} start with a TAB character.
+The line(s) underneath the target specify the commands to create the target. Note that each of these command lines \textit{must} be indented to the right with a single tab \keys{\tab} character (not spaces!!)
 
 Save your file. To check it works, run the command \texttt{make} in this directory.
 \begin{lstlisting}[style=BashInputStyle]
@@ -168,7 +168,7 @@ Note that the first target in the Makefile is the `default'. To create a differe
 \section*{Some Puzzles for You}
 
 \subsection{Shorten it!}
-You can rewrite your Makefile to shorten it considerable. In a rule (specifying how to convert a source into a target), the target name can be written as \verb+$@+ and the source name can be written as \verb+$<+. Rewrite your Makefile to use these meta-variables instead. Check \url{http://www.linux-pages.com/2013/02/gnu-makefile-special-variables-dollar-at/} for more details.
+You can rewrite your Makefile to shorten it considerable. In a rule (specifying how to convert a source into a target), the target name can be written as \verb+$@+ and the source name can be written as \verb+$<+. Rewrite your Makefile to use these meta-variables instead. Check \url{https://www.linux-pages.com/2013/02/gnu-makefile-special-variables-dollar-at/} for more details.
 
 \subsection{Do it for Java}
 Find (or quickly write) a Java program and write a Makefile to automate its compilation, using the \texttt{javac} command.
