@@ -9,6 +9,14 @@ lang=en-UK % set language for the document
 \documentclass{article}
 \usepackage{xcolor}
 \usepackage{hyperref}
+\hypersetup{
+pdftitle={Unix Tutorial 2: Scripting with Pipes}, % Title of the PDF
+pdfauthor={Jeremy Singer, University of Glasgow}, % Author
+pdfkeywords={Unix,Linux,Command Line},% Keywords for the PDF
+pdfsubject={basic Unix command line tutorial}, % Subject or description
+}
+
+
 %\usepackage{minted}
 %\usemintedstyle{bash}
 
@@ -52,15 +60,15 @@ lang=en-UK % set language for the document
 \begin{document}
 
 
-\title{Unix Tutorial 2: Unix Pipes}
-\author{Jeremy Singer}
-\date{23 Sep 2024}
-\maketitle
+%% \title{Unix Tutorial 2: Unix Pipes}
+%% \author{Jeremy Singer}
+%% \date{23 Sep 2024}
+%% \maketitle
   
-%% \noindent
-%% {\Large \textsf{\textbf{Unix Tutorial 2: Unix Pipes}}}
+\noindent
+{\Large \textsf{\textbf{Unix Tutorial 2: Unix Pipes}}}
 
-%% \bigskip
+\bigskip
 
 
 Today, we are going to practise chaining together simple commands using the Unix pipe facility, which is written as a vertical bar i.e.\ \textbar.
