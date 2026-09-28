@@ -85,11 +85,12 @@ pdfsubject={basic Unix command line tutorial}, % Subject or description
 
 
 
-This week we are doing a deep dive into Unix. You need to go
+This week we are doing a \textbf{deep dive into Unix}.
+You need to go
 through a series of practical worksheets to gain experience with
-using the Unix terminal.
+using the Unix command line, known as the \emph{terminal}.
 
-There are different options for accessing Linux, which we outline
+There are various different options for accessing Linux, which we outline
 below. Read through the sheet and work out which option is best
 for you. Our lab tutors will be available to help and advise each
 afternoon this week.
@@ -98,27 +99,37 @@ afternoon this week.
 
 \section*{Windows}
 
-On Windows 10 or 11, install and activate WSL (official instructions at \url{https://learn.microsoft.com/en-us/windows/wsl/install}) then you can use the terminal natively in Windows with \texttt{wsl.exe}. Installation might take \emph{several hours}, especially on a wireless connection.
+On Windows 10 or 11, install and activate WSL (official instructions at \url{https://learn.microsoft.com/en-us/windows/wsl/install}) then you can use the terminal natively in Windows with \texttt{wsl.exe}. Installation might take \emph{several hours}, especially on a wireless connection. It's worth doing this before you come to the lab, if you can.
 
 If you are more adventurous, install a virtual machine (VM) using VirtualBox
-(see \url{https://www.virtualbox.org/}) and then choose your Linux distributionprobably Ubuntu 22.04.3 LTS unless you have a strong preference.
+(see \url{https://www.virtualbox.org/}) and then choose your Linux distribution---probably Ubuntu 24.04 LTS unless you have a strong preference.
 
-If you are super adventurous---but only do this if you have backed up your system---you could partition your drive and install Linux natively as a dual boot option. This is quite complex and will take time.
+If you are super adventurous---but only do this if you have backed up your system---you could partition your drive and install Linux natively as a dual boot option. This is quite complex, potentially destructive of your existing setup, and will take time. Not recommended unless you are a committed power user.
 
-You might also decide to use an online VM from Amazon Web Services, Windows Azure or similar. Watch out! You will need to sign up for an account and probably have to give them your credit card details.
+You might also decide to use an online VM from Amazon Web Services, Windows Azure, Google Cloud Platform,  or similar. Watch out! You will need to sign up for an account and probably have to give them your credit card details.
 This will allow you to access the server via the \texttt{ssh} tool, which you should be able to find in your command prompt.
 
 The university has set up a Azure VM that \emph{might} work, at IP address
 \texttt{10.224.160.71}. This server is only accessible on the University campus or with the UoG VPN.
-Use your GUID credentials to login - although this might not work(?!)
+Use your regular GUID credentials to login - although this might not work(?!)
 
 \begin{lstlisting}[style=BashInputStyle]
   $ ssh 2412345a@10.224.160.71
 \end{lstlisting}
 
+%% $
 
+Finally, the School of Computing Science has a dedicated Linux
+cluster for students. The hostnames are \texttt{stlinux01} and
+\texttt{stlinux02}. Higher integer suffixes might work too. Again,
+you can use \texttt{ssh} from a university campus network to
+connect to these servers. Again, use your GUID login name. However your password is likely to be the last 8 digits on your library barcode. This account might need to be configured for you --- contact Jeremy for more info if you are looking to go down this route.
 
+\begin{lstlisting}[style=BashInputStyle]
+  $ ssh 2412345a@stlinux01.dcs.gla.ac.uk
+\end{lstlisting}
 
+%% $
 
 \section*{Mac}
 
@@ -142,6 +153,6 @@ do something like:
   $ ssh username@hostname.com
 \end{lstlisting}
 
-to connect to a remote server.
+to connect to a remote server. Use the same remote server addresses as above, e.g.\ \texttt{10.224.160.71} or \texttt{stlinux01.dcs.gla.ac.uk}
 
 \end{document}
